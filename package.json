@@ -1,0 +1,31 @@
+{
+  "name": "app_i",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "axios": "^1.2.1",
+    "bootstrap": "^5.2.3",
+    "firebase": "^9.15.0",
+    "font-awesome": "^4.7.0",
+    "mdb-react-ui-kit": "^5.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.5.0",
+    "redux": "^4.2.0",
+    "swiper": "^8.4.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@vitejs/plugin-react": "^3.0.0",
+    "vite": "^4.0.0"
+  }
+}
