@@ -10,7 +10,6 @@ const SingleProduct = () => {
   const [laoding, setLoading] = useState(false);
 
   const store = useSelector(store => store);
-  console.log(store);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -18,19 +17,10 @@ const SingleProduct = () => {
       setLoading(true);
       const res = await axios.get(`https://fakestoreapi.com/products/${id}`);
       setProduct(res.data);
-      console.log(res.data);
       setLoading(false);
     };
     getProduct();
   }, []);
-
-  // const Loading = () => {
-  //   return (
-  //     <div className="col-md-6">
-  //       <Skeleton height={450} />
-  //     </div>
-  //   );
-  // };
 
   const ShowProduct = () => {
     return (

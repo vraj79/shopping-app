@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../redux/cart/cartAction";
+import { ToastContainer, toast } from "react-toastify";
+import { Atom, CircularProgress, FourSquare } from "react-loading-indicators";
 
 const Products = () => {
-  
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
@@ -13,9 +14,7 @@ const Products = () => {
 
   const dispatch = useDispatch();
 
-  const {AuthReducer}=useSelector((store)=>store)
-
-  console.log(AuthReducer);
+  const { AuthReducer } = useSelector((store) => store);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -25,7 +24,6 @@ const Products = () => {
         setData(res.data);
         setFilter(res.data);
         setLoading(false);
-        // console.log(filter);
       }
       return () => {
         componentMounted = false;
@@ -34,19 +32,39 @@ const Products = () => {
     getProducts();
   }, []);
 
-  const Loading = () => {
-    const percentage=66
-    return <h1>Loading....</h1>
+  const notifyLogin = () => toast.warn("Please Login First");
+
+  const notifySuccess = () => toast.success("Added to Cart");
+
+  const handleCart = (data) => {
+    if (AuthReducer) {
+      dispatch(addCart(data));
+      notifySuccess();
+    } else {
+      notifyLogin();
+    }
   };
 
-  const filterProduct = category => {
-    const fil_data = data.filter(ele => ele.category === category);
+  const filterProduct = (category) => {
+    const fil_data = data.filter((ele) => ele.category === category);
     setFilter(fil_data);
   };
 
   const ShowProducts = () => {
     return (
       <div>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
         <div className="buttons text-center">
           <button
             onClick={() => setFilter(data)}
@@ -80,7 +98,7 @@ const Products = () => {
           </button>
         </div>
         <div className="d-flex flex-wrap justify-content-center my-4">
-          {filter.map(ele => {
+          {filter.map((ele) => {
             return (
               <div
                 key={ele.id}
@@ -97,7 +115,7 @@ const Products = () => {
                         height: "200px",
                         width: "200px",
                         display: "block",
-                        margin: "auto"
+                        margin: "auto",
                       }}
                       src={ele.image}
                       className="card-img-top"
@@ -109,18 +127,18 @@ const Products = () => {
                       {ele.title.substring(0, 12)}...
                     </h5>
                     <p className="card-text lead fw-bold">
-                    ₹ {Math.ceil(ele.price)*70}
+                      ₹ {Math.ceil(ele.price) * 70}
                     </p>
                     <button
-                      onClick={() => AuthReducer?dispatch(addCart(ele)):alert("Please Login First")}
-                      className="btn btn-outline-primary my-2"
+                      onClick={() => handleCart(ele)}
+                      className="btn btn-primary my-2"
                     >
                       Add To Cart
                     </button>
                     <br />
                     <NavLink
                       to={`/products/${ele.id}`}
-                      className="btn btn-outline-warning"
+                      className="btn btn-warning"
                     >
                       Buy Now
                     </NavLink>
@@ -145,7 +163,13 @@ const Products = () => {
         </div>
       </div>
       <div className="text-center">
-        {loading ? <Loading /> : <ShowProducts />}
+        {loading ? (
+          <div className="container mt-5 text-center d-flex align-items-center justify-content-center">
+            <FourSquare color="skyblue" size="large" text="" textColor="" />
+          </div>
+        ) : (
+          <ShowProducts />
+        )}
       </div>
     </div>
   );

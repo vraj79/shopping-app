@@ -18,10 +18,6 @@ const Login = () => {
 
   const dispatch=useDispatch()
 
-  const store=useSelector((store)=>store)
-
-  console.log(store);
-  
   const handleChange=(e)=>{
     const {name,value}=e.target
     setFormData({...formData,[name]:value});
@@ -31,13 +27,10 @@ const Login = () => {
     setBtnDis(true)
     signInWithEmailAndPassword(auth,formData.email,formData.password)
     .then(async(res)=>{
-      // console.log(res)
       setBtnDis(false);
-      console.log(res)
       dispatch(login())
       navigate('/')
     }).catch((err)=>{
-      // console.log(err);
       setBtnDis(false);
       setErr(err.message)
     })

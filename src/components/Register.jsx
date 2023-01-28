@@ -1,51 +1,51 @@
-import { createUserWithEmailAndPassword ,updateProfile} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../Firebase/firebase";
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/auth/AuthAction";
 
 export const Register = () => {
-  const [formData,setFormData]=useState({name:"",email:"",password:""});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const {name,email,password}=formData;
+  const { name, email, password } = formData;
 
-  const [btnDis,setBtnDis]=useState(false)
+  const [btnDis, setBtnDis] = useState(false);
 
-  const [err,setErr]=useState("")
+  const [err, setErr] = useState("");
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
-  const {store}=useSelector((store)=>store)
+  const { store } = useSelector((store) => store);
 
-  console.log(store);
-  
-  const handleChange=(e)=>{
-    const {name,value}=e.target
-    setFormData({...formData,[name]:value});
-  }
 
-  const handleSubmit=()=>{
-    setBtnDis(true)
-    createUserWithEmailAndPassword(auth,formData.email,formData.password)
-    .then(async(res)=>{
-      // console.log(res)
-      setBtnDis(false);
-      console.log(res)
-      await updateProfile(res.user,{
-        displayName:formData.name
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = () => {
+    setBtnDis(true);
+    createUserWithEmailAndPassword(auth, formData.email, formData.password)
+      .then(async (res) => {
+        setBtnDis(false);
+        await updateProfile(res.user, {
+          displayName: formData.name,
+        });
+        dispatch(login());
+        navigate("/");
       })
-      dispatch(login())
-      navigate('/')
-    }).catch((err)=>{
-      // console.log(err);
-      setBtnDis(false);
-      setErr(err.message)
-    })
-  }
-  // console.log(formData);
+      .catch((err) => {
+        setBtnDis(false);
+        setErr(err.message);
+      });
+  };
 
   return (
     <div>
@@ -94,10 +94,9 @@ export const Register = () => {
                               Your Name
                             </label>
                             <input
-                            name="name"
-                            value={name}
-                            onChange={(e)=>handleChange(e)}
-
+                              name="name"
+                              value={name}
+                              onChange={(e) => handleChange(e)}
                               type="text"
                               id="formControlLg"
                               className="border form-control p-1"
@@ -114,9 +113,9 @@ export const Register = () => {
                               Email address
                             </label>
                             <input
-                            value={email}
-                            name="email"
-                            onChange={(e)=>handleChange(e)}
+                              value={email}
+                              name="email"
+                              onChange={(e) => handleChange(e)}
                               type="email"
                               id="formControlLg"
                               className="border form-control p-1"
@@ -133,10 +132,9 @@ export const Register = () => {
                               Password
                             </label>
                             <input
-                            value={password}
-                            name="password"
-                            onChange={(e)=>handleChange(e)}
-
+                              value={password}
+                              name="password"
+                              onChange={(e) => handleChange(e)}
                               type="password"
                               id="formControlLg"
                               className="border form-control p-1"
@@ -207,7 +205,24 @@ export const Register = () => {
                             </label>
                           </div>
                         </div> */}
-                        <p>{err!==""?<><button onClick={()=>window.location.reload()} className="btn fw-bold btn-outline-danger text-danger"><i className="fa fa-exclamation-triangle" aria-hidden="true"></i> <span>{err}</span></button></>:err}</p>
+                        <p>
+                          {err !== "" ? (
+                            <>
+                              <button
+                                onClick={() => window.location.reload()}
+                                className="btn fw-bold btn-outline-danger text-danger"
+                              >
+                                <i
+                                  className="fa fa-exclamation-triangle"
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                <span>{err}</span>
+                              </button>
+                            </>
+                          ) : (
+                            err
+                          )}
+                        </p>
                         <div className="form-check d-flex justify-content-center my-1">
                           <input
                             className="form-check-input me-2"
@@ -222,23 +237,25 @@ export const Register = () => {
                             I agree all statements in{" "}
                             <a href="#">Terms of service</a>
                           </label>
-                          
                         </div>
                         <div className="d-flex justify-content-center">
-                  <p className="small fw-bold my-2">Already have an account? <Link to="/login" className="link-danger">Register</Link></p>
-                          
+                          <p className="small fw-bold my-2">
+                            Already have an account?{" "}
+                            <Link to="/login" className="link-danger">
+                              Login
+                            </Link>
+                          </p>
                         </div>
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                           <button
                             type="button"
                             className="btn btn-primary btn-lg"
                             disabled={btnDis}
-                            onClick={(e)=>handleSubmit(e)}
+                            onClick={(e) => handleSubmit(e)}
                           >
                             Register
                           </button>
                         </div>
-                        
                       </form>
                     </div>
                     <div className="col col-lg-6 col-xl-7 d-flex">

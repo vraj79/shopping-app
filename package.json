@@ -17,8 +17,12 @@
     "mdb-react-ui-kit": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-loading-indicators": "^0.0.11",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.5.0",
+    "react-step-progress-bar": "^1.0.3",
+    "react-toastify": "^9.1.1",
+    "react-transition-group": "^4.4.5",
     "redux": "^4.2.0",
     "swiper": "^8.4.5"
   },
