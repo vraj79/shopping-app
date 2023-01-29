@@ -40,7 +40,9 @@ function App() {
           exact
           path="/checkout"
           element={
+            <PrivateRoute>
               <Checkout />
+              </PrivateRoute>
           }
         />
         <Route exact path="/login" element={<Login />} />

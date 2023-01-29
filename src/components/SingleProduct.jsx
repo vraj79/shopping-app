@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../redux/cart/cartAction";
+import { FourSquare } from "react-loading-indicators";
+import { ToastContainer, toast } from "react-toastify";
 
 const SingleProduct = () => {
   const { id } = useParams();
@@ -22,9 +24,16 @@ const SingleProduct = () => {
     getProduct();
   }, []);
 
+  const notifySuccess = () => toast.success("Added to Cart");
+
+  const handleCart=(data)=>{
+    dispatch(addCart(data));
+    notifySuccess();
+  }
+
   const ShowProduct = () => {
     return (
-      <div className="d-flex m-4">
+      <div className="d-flex flex-wrap m-4">
         <div className="col-md-6">
           <img width={"90%"} height={"460px"} src={product.image} alt="" />
         </div>
@@ -46,7 +55,7 @@ const SingleProduct = () => {
             {product.description}
           </p>
           <button
-            onClick={() => dispatch(addCart(product))}
+            onClick={() => handleCart(product)}
             className="btn btn-outline-dark"
           >
             Add To Cart
@@ -64,10 +73,22 @@ const SingleProduct = () => {
       <div className="container">
         <div className="row">
           {laoding
-            ? <h1 className="text-center mt-5">Loading...</h1>
+            ? <div className="container mt-5 text-center d-flex align-items-center justify-content-center">
+            <FourSquare color="skyblue" size="large" text="" textColor="" />
+          </div>
             : <ShowProduct />}
         </div>
       </div>
+      <ToastContainer position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"/>
     </div>
   );
 };

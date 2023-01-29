@@ -1,4 +1,3 @@
-import React from 'react'
 import { ADD_ITEM,DEL_ITEM } from './cartActionTypes'
 
 const cart=[]

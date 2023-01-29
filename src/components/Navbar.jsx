@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Firebase/firebase";
 import { signOut } from "firebase/auth";
@@ -7,18 +7,18 @@ import { logout } from "../redux/auth/AuthAction";
 import { ToastContainer, toast } from "react-toastify";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { CartReducer } = useSelector((store) => store);
+  const { CartReducer ,AuthReducer} = useSelector((store) => store);
+  const store = useSelector((store) => store);
+  console.log(store);
 
-  const [user, setUser] = useState("");
-
-  const { AuthReducer } = useSelector((store) => store);
+  const [username, setUsername] = useState("");
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        setUser(user.displayName);
+        setUsername(user.displayName);
       }
     });
   }, []);
@@ -58,26 +58,22 @@ const Navbar = () => {
   };
 
   const notifySuccess = () => toast.success("Sign Out Successful");
-  const notifyError = () => toast.error("Something went wrong");
+  // const notifyError = () => toast.error("Something went wrong");
+  const navigate=useNavigate()
 
-  const handleSignOut = (auth) => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        dispatch(logout());
-        notifySuccess();
-      })
-      .catch((error) => {
-        // An error happened.
-        notifyError();
-      });
+  const handleSignOut = () => {
+    notifySuccess();
+    setTimeout(() => {
+      navigate('/');
+      window.location.reload();
+    }, 2000);
   };
 
   const NavAuthPaths = (
     <div className="buttons">
       {AuthReducer ? (
         <button
-          onClick={() => handleSignOut(auth)}
+          onClick={handleSignOut}
           className="btn btn-outline-dark"
         >
           {" "}
@@ -95,7 +91,7 @@ const Navbar = () => {
         <button className="btn btn-outline-dark ms-2">
           {" "}
           <i className="fa fa-user me-1" />
-          {user}
+          {username}
         </button>
       ) : (
         <NavLink to="/register" className="btn btn-outline-dark ms-2">
